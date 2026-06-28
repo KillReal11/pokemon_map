@@ -10,10 +10,11 @@ class Pokemon(models.Model):
     description = models.TextField(null=True, blank=True)
 
     evolved_from = models.ForeignKey(
-        "self",
-        on_delete=models.CASCADE,
+        'self',
         null=True,
-        blank=True
+        blank=True,
+        related_name='evolved_to',
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
