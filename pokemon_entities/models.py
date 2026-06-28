@@ -3,11 +3,11 @@ from django.utils import timezone
 
 
 class Pokemon(models.Model):
-    title_ru = models.CharField(max_length=200)
-    title_en = models.CharField(max_length=200, null=True, blank=True)
-    title_jp = models.CharField(max_length=200, null=True, blank=True)
-    photo = models.ImageField(upload_to="pokemon", null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    title_ru = models.CharField(max_length=200, verbose_name='Имя на русском')
+    title_en = models.CharField(max_length=200, null=True, blank=True, verbose_name='Имя на английском')
+    title_jp = models.CharField(max_length=200, null=True, blank=True, verbose_name='Имя на японском')
+    photo = models.ImageField(upload_to="pokemon", null=True, blank=True, verbose_name='Фото покемона')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
 
     evolved_from = models.ForeignKey(
         'self',
@@ -15,6 +15,7 @@ class Pokemon(models.Model):
         blank=True,
         related_name='evolved_to',
         on_delete=models.SET_NULL,
+        verbose_name='Из кого эволюционировал'
     )
 
     def __str__(self):
