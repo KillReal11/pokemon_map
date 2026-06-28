@@ -7,7 +7,7 @@ class Pokemon(models.Model):
     photo = models.ImageField(upload_to="pokemon", null=True, blank=True)
 
     def __str__(self):
-        return f'{self.title} {self.id}'
+        return f'{self.title}'
 
 
 class PokemonEntity(models.Model):
@@ -20,7 +20,7 @@ class PokemonEntity(models.Model):
         on_delete=models.CASCADE)
     
     def __str__(self):
-        return f'{self.pokemon}'
+        return f'{self.pokemon} {self.pokemon.id}'
     
     appeared_at = models.DateTimeField(default=timezone.now, verbose_name='время появления')
     disappeared_at = models.DateTimeField(verbose_name='время исчезновения')
