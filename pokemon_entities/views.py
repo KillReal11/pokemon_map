@@ -62,7 +62,6 @@ def show_all_pokemons(request):
 def show_pokemon(request, pokemon_id):
     current_pokemon = Pokemon.objects.get(id=pokemon_id)
     pokemon_img_url = request.build_absolute_uri(current_pokemon.photo.url) if current_pokemon.photo else None
-
     pokemons_on_page = {
         'pokemon_id': current_pokemon.id,
         'img_url': pokemon_img_url,
@@ -71,6 +70,27 @@ def show_pokemon(request, pokemon_id):
         'title_en': current_pokemon.title_en,
         'title_jp': current_pokemon.title_jp,
     }
+
+    if current_pokemon.evolved_from:
+        previous_evolution_pokemon = current_pokemon.evolved_from
+        previous_evolution_pokemon_img_url = (
+            request.build_absolute_uri(previous_evolution_pokemon.photo.url)
+            if previous_evolution_pokemon.photo
+            else None
+        )
+
+        previous_evolution = {
+                "title_ru": previous_evolution_pokemon,
+                "pokemon_id": previous_evolution_pokemon.id,
+                "img_url": previous_evolution_pokemon_img_url
+        }
+        pokemons_on_page['previous_evolution'] = previous_evolution
+
+
+
+
+
+
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     pokemons = Pokemon.objects.all()
