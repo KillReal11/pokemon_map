@@ -30,14 +30,23 @@ class PokemonEntity(models.Model):
         Pokemon,
         verbose_name='покемон',
         on_delete=models.CASCADE)
-    
 
-    
     def __str__(self):
         return f'{self.pokemon} {self.id}'
-    
-    appeared_at = models.DateTimeField(default=timezone.now, verbose_name='время появления')
-    disappeared_at = models.DateTimeField(verbose_name='время исчезновения')
+
+    appeared_at = models.DateTimeField(
+        default=timezone.now,
+        verbose_name='время появления',
+        null=True,
+        blank=True
+    )
+
+    disappeared_at = models.DateTimeField(
+        verbose_name='время исчезновения',
+        null=True,
+        blank=True
+    )
+
     level = models.IntegerField(null=True, blank=True, verbose_name='уровень')
     health = models.IntegerField(null=True, blank=True, verbose_name='здоровье')
     offense = models.IntegerField(null=True, blank=True, verbose_name='атака')
