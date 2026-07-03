@@ -38,22 +38,24 @@ def show_all_pokemons(request):
         appeared_at__lt=current_time,
         disappeared_at__gt=current_time
     )
+    
     for pokemon in pokemons:
         pokemon_img_url = request.build_absolute_uri(pokemon.photo.url) if pokemon.photo else None
-
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': pokemon_img_url,
             'title_ru': pokemon.title_ru,
         })
 
-        for pokemon_entity in pokemon_entities:
-            if pokemon_entity.pokemon == pokemon:
-                add_pokemon(
-                    folium_map, pokemon_entity.latitude,
-                    pokemon_entity.longitude,
-                    pokemon_img_url
-                )
+    for pokemon_entity in pokemon_entities:
+        pokemon = pokemon_entity.pokemon
+        pokemon_img_url = request.build_absolute_uri(pokemon.photo.url) if pokemon.photo else None
+        if pokemon_entity.pokemon == pokemon:
+            add_pokemon(
+                folium_map, pokemon_entity.latitude,
+                pokemon_entity.longitude,
+                pokemon_img_url
+            )
 
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
@@ -112,8 +114,7 @@ def show_pokemon(request, pokemon_id):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     current_time = timezone.now()
-    pokemon_entities = PokemonEntity.objects.filter(
-        pokemon=current_pokemon,
+    pokemon_entities = current_pokemon.entities.filter(
         appeared_at__lt=current_time,
         disappeared_at__gt=current_time
     )
