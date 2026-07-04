@@ -38,7 +38,7 @@ def show_all_pokemons(request):
         appeared_at__lt=current_time,
         disappeared_at__gt=current_time
     )
-    
+
     for pokemon in pokemons:
         pokemon_img_url = request.build_absolute_uri(pokemon.photo.url) if pokemon.photo else None
         pokemons_on_page.append({
@@ -48,14 +48,16 @@ def show_all_pokemons(request):
         })
 
     for pokemon_entity in pokemon_entities:
-        pokemon = pokemon_entity.pokemon
-        pokemon_img_url = request.build_absolute_uri(pokemon.photo.url) if pokemon.photo else None
-        if pokemon_entity.pokemon == pokemon:
-            add_pokemon(
-                folium_map, pokemon_entity.latitude,
-                pokemon_entity.longitude,
-                pokemon_img_url
-            )
+        pokemon_img_url = (
+            request.build_absolute_uri(pokemon_entity.pokemon.photo.url)
+            if pokemon_entity.pokemon.photo
+            else None
+        )
+        add_pokemon(
+            folium_map, pokemon_entity.latitude,
+            pokemon_entity.longitude,
+            pokemon_img_url
+        )
 
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
